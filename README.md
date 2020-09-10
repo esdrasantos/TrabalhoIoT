@@ -6,6 +6,7 @@ na planta e notifica caso a disposição de luz solar for excessiva.
 
 Recursos: O sensoriamente é feito através de um higrômetro e um LDR. O sinais seram pré-processados por um Microcontrolador ARM e as informações
 serão transmitidas pela serial utilizando o módulo Bluetooth HC-05.
+
 HIGRÔMETRO:
 <img src="https://ae01.alicdn.com/kf/HTB1r0P4JVXXXXb8XpXXq6xXFXXXj/225565846/HTB1r0P4JVXXXXb8XpXXq6xXFXXXj.jpg" width="200" height="200" /> 
 LDR:
