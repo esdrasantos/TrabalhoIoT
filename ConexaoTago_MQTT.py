@@ -7,7 +7,18 @@ Created on Thu Sep 10 15:48:33 2020
 # Bibliotecas
 import paho.mqtt.client as mqtt
 import json
+import serial
 
+def escreve_msg(umidade,luminosidade):
+    msg = {
+            'variable': 'umidade',
+            'value':''
+                                   }
+    msg['value']      = umidade    
+    print(msg)
+    json_file = json.dumps(msg)
+    client.publish(topico1, payload=json_file, qos=1, retain=False)
+    
 # Tratamento do evento de mensagem recebida no tópico assinado pelo cliente mqtt
 def on_message(client, userdata, message):
     print("mensagem recebida do topico",message.topic)
@@ -22,6 +33,7 @@ def on_connect(client, userdata, flags, rc):
     print("[STATUS] Conectado ao Broker" + broker + " Resultado de conexao: " + str(rc))
     print("subscrevendo ao topico", topico1)
     client.subscribe(topico1)
+    escreve_msg(25,15000)
  
 # Definindo os objetos
 broker = "mqtt.tago.io"          # Endereço do broker
@@ -44,6 +56,10 @@ client.on_connect = on_connect
 client.on_message = on_message
 client.on_log     = on_log
 
+
+
 client.loop_forever() # Estabelece uma comunicacao continua entre o cliente e o broker
+
+
 
 
