@@ -1,5 +1,6 @@
 # Regador automático (Trabalho de IoT 2020)
-##  Integrantes: Carlos Esdra A. dos Santos, 
+##  Integrantes: Carlos Souza, Esdra A. dos Santos, Gabriela Bley Rodrigues e Murilo Schuck.
+### Curso de Eletrônica da F.E.T Liberato Salzano Vieira da Cunha, Turma: 4411
 
 Proposta: Quantificar a umidade do solo de uma planta e indicar quando ela deve ser regada com base na previsão do tempo e a precipitação de chuva.
 A planta é regada automaticamente caso não haja possibilidade de chuva no dia da análise ou no dia seguinte. Verifica-se, também, a luminosidade
