@@ -9,12 +9,18 @@ import paho.mqtt.client as mqtt
 import json
 import serial
 
-def escreve_msg(umidade,luminosidade):
-    msg = {
-            'variable': 'umidade',
-            'value':''
-                                   }
-    msg['value']      = umidade    
+def escreve_msg(valor_umidade,valor_luminosidade):
+    msg = [
+            {
+                'variable': 'umidade',
+                'value'   :  valor_umidade
+            },
+            {
+                'variable': 'luminosidade',
+                'value'   :  valor_luminosidade
+            }
+          ]
+  
     print(msg)
     json_file = json.dumps(msg)
     client.publish(topico1, payload=json_file, qos=1, retain=False)
