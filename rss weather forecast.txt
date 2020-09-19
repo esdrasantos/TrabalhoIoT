@@ -1,4 +1,0 @@
-id of my location: 3456068
-
-rss feed of weather podcast novo hamburgo:
-https://weather-broker-cdn.api.bbci.co.uk/en/forecast/rss/3day/3456068
