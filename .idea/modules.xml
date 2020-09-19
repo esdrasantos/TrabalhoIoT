@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$USER_HOME$/PycharmProjects/MQTT_Reply/.idea/MQTT_Reply.iml" filepath="$USER_HOME$/PycharmProjects/MQTT_Reply/.idea/MQTT_Reply.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/TrabalhoIoT.iml" filepath="$PROJECT_DIR$/.idea/TrabalhoIoT.iml" />
-    </modules>
-  </component>
-</project>
