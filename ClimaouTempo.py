@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Sep  19 11:04:00 2020
+
+@author: Carlos Souza
+@collaborator: Esdra Santos
+
+"""
+
 import weathercom
 import paho.mqtt.client as mqtt
 import json
