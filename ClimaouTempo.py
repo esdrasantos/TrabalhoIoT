@@ -60,7 +60,6 @@ def printit():
     
         print("[STATUS] Conectado ao Broker" + broker + " Resultado de conexao: " + str(rc))
         print("subscrevendo ao topico", topico1)
-        client.subscribe(topico1)
      
     # Definindo os objetos
     broker = "mqtt.tago.io"                # Endereço do broker
@@ -69,8 +68,8 @@ def printit():
     # Topicos para publicar os dados no tago.io
     topico1    = "tago/data/previsao"
     
-    mqtt_username = "PrevisaoTempo" # Nome do cliente 
-    mqtt_password = "203e7bc1-9f80-4296-8585-c8f506afd2ff" #token do dispositivo/cliente
+    mqtt_username = "token" # Nome do cliente 
+    mqtt_password = "7f1d7f85-761e-4b98-92b4-7bab3f528b82" #token do dispositivo/cliente
     
     print("Criando nova instancia")
     client = mqtt.Client()
