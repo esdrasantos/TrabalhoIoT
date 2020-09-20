@@ -5,7 +5,7 @@ import time
 import threading
 
 def printit():
-    threading.Timer(3600.0, printit).start()
+    threading.Timer(3600.0, printit).start() # Run o código a cada 1h (3600 min)
       
     cidade="Novo Hamburgo"
     weatherDetails = weathercom.getCityWeatherDetails(city=cidade, queryType="daily-data")
@@ -40,7 +40,7 @@ def printit():
                   }
              ]
         json_file = json.dumps(previsao)
-        client.publish(topico1, payload=json_file, qos=1, retain=False)
+        client.publish(topico1, payload=json_file, qos=1, retain=True) # Publica os dados no broker com retenção
 
     # Método que exibe o registro da comunicacao por protocolo mqtt no terminal
     def on_log(client, userdata, level, buf):
@@ -70,14 +70,14 @@ def printit():
     print("Conectando ao broker...")
     client.connect(broker,porta,keepAlive)
     
-    client.loop_start() #start the loop
+    client.loop_start() 
     
     client.on_connect = on_connect
     client.on_log     = on_log
     
     envia_relatorio()
     
-    time.sleep(4) # wait
-    client.loop_stop() #stop the loop
+    time.sleep(4) 
+    client.loop_stop() 
     
-printit()
+printit() # Chama a função que a periodiza o código para carregar conforme o tempo determinado
