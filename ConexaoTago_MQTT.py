@@ -38,7 +38,7 @@ def on_log(client, userdata, level, buf):
 def on_connect(client, userdata, flags, rc):
 
     print("[STATUS] Conectado ao Broker" + broker + " Resultado de conexao: " + str(rc))
-    print("subscrevendo ao topico", topico1)
+    print("subscrevendo ao topico", topico2)
     client.subscribe(topico2)
     escreve_msg(25,15000)
  
@@ -50,7 +50,7 @@ keepAlive = 60                         # Tempo em segundos para o envio de uma r
 topico1    = "tago/data/regador"
 topico2    = "tago/data/previsao"
     
-mqtt_username = "token"
+mqtt_username = "VasoDeFlor"
 mqtt_password = "7f1d7f85-761e-4b98-92b4-7bab3f528b82"
 
 print("criando nova instancia")
