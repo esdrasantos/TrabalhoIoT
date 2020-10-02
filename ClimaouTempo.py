@@ -14,7 +14,7 @@ import time
 import threading
 
 def printit():
-    threading.Timer(3600.0, printit).start() # Run o código a cada 1h (3600 s)
+    threading.Timer(60.0, printit).start() # Run o código a cada 1h (3600 s)
       
     cidade="Novo Hamburgo"
     weatherDetails = weathercom.getCityWeatherDetails(city=cidade, queryType="daily-data")
@@ -45,13 +45,13 @@ def printit():
                       },
                       {
                           'variable': 'chuva',
-                          'value'   :  10
+                          'value'   :  precip
                       }
                   ]
         json_file = json.dumps(previsao)
         cliente.publish(topico1, payload=json_file, qos=1, retain=True) # Publica os dados no broker com retenção
     
-
+    
     # Método que exibe o registro da comunicacao por protocolo mqtt no terminal
     def on_log_esdra(esdra, userdata, level, buf):
         print("log: ",buf)
@@ -71,6 +71,25 @@ def printit():
     
         print("[STATUS] Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
         print("subscrevendo ao topico", topico1)
+    
+    def configura_cliente(cliente,id):
+        
+        cliente.loop_start()
+        
+        print("Conectando ao broker...")
+        cliente.connect(broker,porta)
+         
+        if id == 1:
+            cliente.on_connect = on_connect_esdra
+            cliente.on_log     = on_log_esdra
+        if id == 2:
+            cliente.on_connect = on_connect_carlos
+            cliente.on_log     = on_log_carlos
+        
+        envia_relatorio(cliente)
+        
+        time.sleep(5) 
+        cliente.loop_stop() 
      
     # Definindo os objetos
     broker = "mqtt.tago.io"                # Endereço do broker
@@ -79,43 +98,16 @@ def printit():
     # Topicos para publicar os dados no tago.io
     topico1    = "tago/data/previsao"
     
-    esdra_username = "" # Nome do cliente 
-    esdra_password = "e35c4944-06a4-46f1-be9d-243af76bd4a0" #token do dispositivo/cliente
     print("Criando nova instancia")
     esdra= mqtt.Client()
+    esdra.username_pw_set('',"e35c4944-06a4-46f1-be9d-243af76bd4a0")
     print("Configurando o cliente")
-    esdra.username_pw_set(esdra_username, password=esdra_password)
+    configura_cliente(esdra,1)
     
-    esdra.loop_start()
-    
-    print("Conectando ao broker...")
-    esdra.connect(broker,porta)
-    esdra.on_connect = on_connect_esdra
-    esdra.on_log     = on_log_esdra
-    envia_relatorio(esdra)
-    
-    time.sleep(4) 
-    esdra.loop_stop() 
-    
-    carlos_username = "" # Nome do cliente 
-    carlos_password = "7f1d7f85-761e-4b98-92b4-7bab3f528b82" #token do dispositivo/cliente
     print("Criando nova instancia")
     carlos= mqtt.Client()
+    carlos.username_pw_set('','7f1d7f85-761e-4b98-92b4-7bab3f528b82')
     print("Configurando o cliente")
-    
-    carlos.username_pw_set(carlos_username, password=carlos_password)
-    
-    carlos.loop_start()
-    
-    print("Conectando ao broker...")
-    carlos.connect(broker,porta)
-    carlos.on_connect = on_connect_carlos
-    carlos.on_log     = on_log_carlos
-    envia_relatorio(carlos)
-    
-    time.sleep(4) 
-    carlos.loop_stop() 
-    
-    
-    
+    configura_cliente(carlos,2)
+
 printit() # Chama a função que a periodiza o código para carregar conforme o tempo determinado
