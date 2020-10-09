@@ -14,7 +14,7 @@ import time
 import threading
 
 def printit():
-    threading.Timer(60.0, printit).start() # Run o código a cada 1h (3600 s)
+    threading.Timer(3600.0, printit).start() # Run o código a cada 1h (3600 s)
       
     cidade="Novo Hamburgo"
     weatherDetails = weathercom.getCityWeatherDetails(city=cidade, queryType="daily-data")
@@ -34,6 +34,7 @@ def printit():
     
     print('\nConexão por protocolo MQTT')
     def envia_relatorio(cliente):
+       
         previsao = [
                       {
                           'variable': 'temperaturamin',
@@ -48,30 +49,26 @@ def printit():
                           'value'   :  precip
                       }
                   ]
+    
+            
         json_file = json.dumps(previsao)
         cliente.publish(topico1, payload=json_file, qos=1, retain=True) # Publica os dados no broker com retenção
     
-    
-    # Método que exibe o registro da comunicacao por protocolo mqtt no terminal
-    def on_log_esdra(esdra, userdata, level, buf):
-        print("log: ",buf)
-    
     # Rotina que trata o evento de conexao, exibindo o return code e subscrevendo o cliente aos topicos de interesse
-    def on_connect_esdra(esdra, userdata, flags, rc):
+    def on_connect_esdra(client, userdata, flags, rc):
     
         print("[STATUS] Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
-        print("subscrevendo ao topico", topico1)
+      
         
-     # Método que exibe o registro da comunicacao por protocolo mqtt no terminal
-    def on_log_carlos(esdra, userdata, level, buf):
-        print("log: ",buf)
-    
     # Rotina que trata o evento de conexao, exibindo o return code e subscrevendo o cliente aos topicos de interesse
-    def on_connect_carlos(esdra, userdata, flags, rc):
+    def on_connect_carlos(client, userdata, flags, rc):
     
         print("[STATUS] Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
-        print("subscrevendo ao topico", topico1)
     
+    def on_connect_murilo(client, userdata, flags, rc):
+      
+         print("[STATUS] Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
+        
     def configura_cliente(cliente,id):
         
         cliente.loop_start()
@@ -81,19 +78,22 @@ def printit():
          
         if id == 1:
             cliente.on_connect = on_connect_esdra
-            cliente.on_log     = on_log_esdra
+            cidade = "Novo Hamburgo"
         if id == 2:
             cliente.on_connect = on_connect_carlos
-            cliente.on_log     = on_log_carlos
-        
+            cidade = "Sapucaia do Sul"
+        if id == 3:
+            cliente.on_connect = on_connect_murilo
+            cidade = "Sapucaia do Sul"
+       
         envia_relatorio(cliente)
         
         time.sleep(5) 
         cliente.loop_stop() 
      
     # Definindo os objetos
-    broker = "mqtt.tago.io"                # Endereço do broker
-    porta = 1883                           # Porta sem segurança para testes
+    broker = "mqtt.tago.io"                 # Endereço do broker
+    porta = 1883                            # Porta sem segurança para testes
     #keepAlive = 60                         # Tempo em segundos para o envio de uma requisicao ping
     # Topicos para publicar os dados no tago.io
     topico1    = "tago/data/previsao"
@@ -109,5 +109,11 @@ def printit():
     carlos.username_pw_set('','7f1d7f85-761e-4b98-92b4-7bab3f528b82')
     print("Configurando o cliente")
     configura_cliente(carlos,2)
+    
+    print("Criando nova instancia")
+    murilo= mqtt.Client()
+    murilo.username_pw_set('','126127bf-b15b-4054-abf0-4f0a6f17e828')
+    print("Configurando o cliente")
+    configura_cliente(murilo,3)
 
 printit() # Chama a função que a periodiza o código para carregar conforme o tempo determinado
