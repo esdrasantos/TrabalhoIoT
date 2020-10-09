@@ -1,0 +1,10 @@
+16:52:41 **** Incremental Build of configuration Debug for project AmostraSensores ****
+make -j4 all 
+arm-none-eabi-size   AmostraSensores.elf 
+   text	   data	    bss	    dec	    hex	filename
+  20144	    120	   2416	  22680	   5898	AmostraSensores.elf
+Finished building: default.size.stdout
+ 
+
+16:52:44 Build Finished. 0 errors, 0 warnings. (took 3s.275ms)
+
