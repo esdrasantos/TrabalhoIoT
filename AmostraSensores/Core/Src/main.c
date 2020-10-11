@@ -96,7 +96,7 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
-  HAL_UART_Receive_IT(&huart1, &pData, bufferSize); //! Armazena o dado recebido pela serial
+  HAL_UART_Receive_DMA(&huart1, &pData, bufferSize); //! Armazena o dado recebido pela serial
   HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_values, NumberOfConversions); //!Inicia a memória DMA para armazenar os valores da sequência de conversão de 3 canais do AD
 //  HAL_UART_Transmit(&huart2, &pData, bufferSize, SerialTimeOut);
 
@@ -184,11 +184,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		//HAL_UART_Receive_IT(&huart1, &pData, bufferSize); //! Armazena o dado recebido pela serial
 		if(pData == 'r')
+		{
 			snprintf(msg,TAM_MSG,"{'Umidade' : '%lu', 'Luminosidade': '%lu'}",adc_values[0],adc_values[1]);
-			HAL_UART_Transmit_IT(&huart1, (uint8_t*)msg, strlen(msg));
-			HAL_UART_Transmit_IT(&huart2, (uint8_t*)msg, strlen(msg));
+			HAL_UART_Transmit_DMA(&huart1, (uint8_t*)msg, strlen(msg));
 			pData = 0;
+		}
 
+		HAL_UART_Receive_DMA(&huart1, &pData, bufferSize); //! Armazena o dado recebido pela serial
 	}
 
 }
