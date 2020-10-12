@@ -50,8 +50,8 @@ keepAlive = 60                         # Tempo em segundos para o envio de uma r
 topico1    = "tago/data/regador"
 topico2    = "tago/data/previsao"
     
-mqtt_username = "VasoDeFlor"
-mqtt_password = "7f1d7f85-761e-4b98-92b4-7bab3f528b82"
+mqtt_username = "esdra"
+mqtt_password = "e35c4944-06a4-46f1-be9d-243af76bd4a0"
 
 print("criando nova instancia")
 client = mqtt.Client()

@@ -398,3 +398,7 @@
 2020-10-11 19:11:51,029 [INFO] ProjectBuilder:1971 - Suppression de : system_stm32f4xx.c
 2020-10-11 19:11:51,031 [INFO] ProjectBuilder:1971 - Suppression de : tim.c
 2020-10-11 19:11:51,034 [INFO] ProjectBuilder:1971 - Suppression de : usart.c
+2020-10-12 15:27:27,303 [INFO] Activator:176 - 
+
+
+2020-10-12 15:27:27,382 [INFO] Activator:177 - !SESSION log4j initialized

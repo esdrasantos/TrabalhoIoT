@@ -191,6 +191,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		}
 
 		HAL_UART_Receive_DMA(&huart1, &pData, bufferSize); //! Armazena o dado recebido pela serial
+		if(pData == 'h')
+		{
+			snprintf(msg,TAM_MSG,"hello, how are you?");
+			HAL_UART_Transmit_DMA(&huart1, (uint8_t*)msg, strlen(msg));
+			pData = 0;
+		}
 	}
 
 }
