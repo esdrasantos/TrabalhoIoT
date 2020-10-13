@@ -8,39 +8,71 @@ Created on Thu Sep 10 15:48:33 2020
 import paho.mqtt.client as mqtt
 import json
 import serial
+import time
 
-def escreve_msg(valor_umidade,valor_luminosidade):
-    msg = [
-            {
-                'variable': 'umidade',
-                'value'   :  valor_umidade
-            },
-            {
-                'variable': 'luminosidade',
-                'value'   :  valor_luminosidade
-            }
-          ]
-  
-    print(msg)
-    json_file = json.dumps(msg)
-    client.publish(topico1, payload=json_file, qos=1, retain=False)
+def escreve_msg(data):
+      
+    try:
+        
+        informacao = json.loads(data)
+        print(type(informacao))
+        valor_umidade = informacao['umidade']
+        valor_luminosidade = informacao['luminosidade']
+        
+        msg = [
+                {
+                    'variable': 'umidade',
+                    'value'   :  valor_umidade
+                },
+                {
+                    'variable': 'luminosidade',
+                    'value'   :  valor_luminosidade
+                }
+              ]
+        
+        print(msg)
+        json_file = json.dumps(msg)
+        client.publish(topico1, payload=json_file, qos=1, retain=False)
+        
+    except:
+        print("Nao foi possivel compor a msg e nem publica-la...")
+       
+class ConexaoSerial(serial.Serial): #classe filha da classe serial
+    
+    def conectar(self):
+  #     obj  =  serial.Serial() nao se inicializa pela classe pai e sim pela filha
+        try:
+            self.baudrate = 9600
+            self.port = 'COM5'
+            self.timeout = 1
+        except:
+            print("Nao foi possivel se conectar a porta " + str(self.port))
+        
+    def requisitarInfo(self):
+        try:
+            self.open()
+            self.write(b'r')
+            info = self.readline()
+            info = str(info, 'utf-8')
+            print(info)
+            self.close()
+            return info
+        except:
+            print("Nao foi possivel requisitar a informacao da serial...")
+    
+
     
 # Tratamento do evento de mensagem recebida no tópico assinado pelo cliente mqtt
 def on_message(client, userdata, message):
     print("mensagem recebida do topico",message.topic)
     print(json.loads(message.payload))
     
-# Método que exibe o registro da comunicacao por protocolo mqtt no terminal
-def on_log(client, userdata, level, buf):
-    print("log: ",buf)
-
 # Rotina que trata o evento de conexao, exibindo o return code e subscrevendo o cliente aos topicos de interesse
 def on_connect(client, userdata, flags, rc):
-
-    print("[STATUS] Conectado ao Broker" + broker + " Resultado de conexao: " + str(rc))
-    print("subscrevendo ao topico", topico2)
+    print("Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
+    print("subscrevendo ao topico ", topico2)
     client.subscribe(topico2)
-    escreve_msg(25,15000)
+
  
 # Definindo os objetos
 broker = "mqtt.tago.io"                # Endereço do broker
@@ -50,21 +82,33 @@ keepAlive = 60                         # Tempo em segundos para o envio de uma r
 topico1    = "tago/data/regador"
 topico2    = "tago/data/previsao"
     
-mqtt_username = "VasoDeFlor"
-mqtt_password = "7f1d7f85-761e-4b98-92b4-7bab3f528b82"
+mqtt_username = "esdra"
+mqtt_password = "e35c4944-06a4-46f1-be9d-243af76bd4a0"
+
 
 print("criando nova instancia")
 client = mqtt.Client()
 print("Configurando o cliente")
 client.username_pw_set(username=mqtt_username, password=mqtt_password)
-print("Conectando ao broker...")
+
+client.loop_start() 
+
+print("Conectando ao broker ", broker)
 client.connect(broker,porta,keepAlive)
 
 client.on_connect = on_connect
 client.on_message = on_message
-client.on_log     = on_log
 
-client.loop_forever() # Estabelece uma comunicacao continua entre o cliente e o broker
+time.sleep(5) 
+client.loop_stop() 
+
+bluetooth = ConexaoSerial()
+bluetooth.conectar()
+infosensores = bluetooth.requisitarInfo()
+print(type(infosensores))
+                 
+escreve_msg(infosensores)
+
 
 
 
