@@ -14,7 +14,7 @@ import time
 import threading
 
 def printit():
-    threading.Timer(3600.0, printit).start() # Run o código a cada 1h (3600 s)
+    threading.Timer(60, printit).start() # Run o código a cada 1h (3600 s)
       
     cidade="Novo Hamburgo"
     weatherDetails = weathercom.getCityWeatherDetails(city=cidade, queryType="daily-data")
@@ -55,42 +55,23 @@ def printit():
         cliente.publish(topico1, payload=json_file, qos=1, retain=True) # Publica os dados no broker com retenção
     
     # Rotina que trata o evento de conexao, exibindo o return code e subscrevendo o cliente aos topicos de interesse
-    def on_connect_esdra(client, userdata, flags, rc):
+    def on_connect(client, userdata, flags, rc):
     
-        print("[STATUS] Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
+        print("Cliente conectado; resultado de conexao: " + str(rc))
       
         
-    # Rotina que trata o evento de conexao, exibindo o return code e subscrevendo o cliente aos topicos de interesse
-    def on_connect_carlos(client, userdata, flags, rc):
-    
-        print("[STATUS] Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
-    
-    def on_connect_murilo(client, userdata, flags, rc):
-      
-         print("[STATUS] Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
-        
-    def configura_cliente(cliente,id):
+    def configura_cliente(cliente, id, cidade):
         
         cliente.loop_start()
         
-        print("Conectando ao broker...")
+        print("Conectando o cliente " + str(id) + " ao broker " + str(broker))
         cliente.connect(broker,porta)
-         
-        if id == 1:
-            cliente.on_connect = on_connect_esdra
-            cidade = "Novo Hamburgo"
-        if id == 2:
-            cliente.on_connect = on_connect_carlos
-            cidade = "Sapucaia do Sul"
-        if id == 3:
-            cliente.on_connect = on_connect_murilo
-            cidade = "Sapucaia do Sul"
-       
+        cliente.on_connect = on_connect
         envia_relatorio(cliente)
         
         time.sleep(5) 
         cliente.loop_stop() 
-     
+    
     # Definindo os objetos
     broker = "mqtt.tago.io"                 # Endereço do broker
     porta = 1883                            # Porta sem segurança para testes
@@ -99,21 +80,22 @@ def printit():
     topico1    = "tago/data/previsao"
     
     print("Criando nova instancia")
-    esdra= mqtt.Client()
+    esdra = mqtt.Client()
+
     esdra.username_pw_set('',"e35c4944-06a4-46f1-be9d-243af76bd4a0")
     print("Configurando o cliente")
-    configura_cliente(esdra,1)
+    configura_cliente(esdra, 1, "Novo Hamburgo")
     
     print("Criando nova instancia")
     carlos= mqtt.Client()
     carlos.username_pw_set('','7f1d7f85-761e-4b98-92b4-7bab3f528b82')
     print("Configurando o cliente")
-    configura_cliente(carlos,2)
+    configura_cliente(carlos, 2, "Sapucaia do Sul")
     
     print("Criando nova instancia")
     murilo= mqtt.Client()
     murilo.username_pw_set('','126127bf-b15b-4054-abf0-4f0a6f17e828')
     print("Configurando o cliente")
-    configura_cliente(murilo,3)
+    configura_cliente(murilo, 3, "Sapucaia do Sul")
 
 printit() # Chama a função que a periodiza o código para carregar conforme o tempo determinado

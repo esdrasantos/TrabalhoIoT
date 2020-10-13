@@ -185,7 +185,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		//HAL_UART_Receive_IT(&huart1, &pData, bufferSize); //! Armazena o dado recebido pela serial
 		if(pData == 'r')
 		{
-			snprintf(msg,TAM_MSG,"{'Umidade' : '%lu', 'Luminosidade': '%lu'}",adc_values[0],adc_values[1]);
+			snprintf(msg,TAM_MSG,"{\"umidade\": \"%lu\", \"luminosidade\": \"%lu\"}",adc_values[0],adc_values[1]);
 			HAL_UART_Transmit_DMA(&huart1, (uint8_t*)msg, strlen(msg));
 			pData = 0;
 		}

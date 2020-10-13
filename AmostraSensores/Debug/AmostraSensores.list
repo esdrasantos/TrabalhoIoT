@@ -1069,7 +1069,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  800097a:	2b72      	cmp	r3, #114	; 0x72
  800097c:	d118      	bne.n	80009b0 <HAL_UART_RxCpltCallback+0x4c>
 		{
-			snprintf(msg,TAM_MSG,"{'Umidade' : '%lu', 'Luminosidade': '%lu'}",adc_values[0],adc_values[1]);
+			snprintf(msg,TAM_MSG,"{\"umidade\": \"%lu\", \"luminosidade\": \"%lu\"}",adc_values[0],adc_values[1]);
  800097e:	4b1f      	ldr	r3, [pc, #124]	; (80009fc <HAL_UART_RxCpltCallback+0x98>)
  8000980:	781b      	ldrb	r3, [r3, #0]
  8000982:	461a      	mov	r2, r3
