@@ -9,21 +9,32 @@ import paho.mqtt.client as mqtt
 import json
 import serial
 import time
-
+razao = 100/(2**8) 
 def escreve_msg(data, precipChuva):
       
     try: 
         informacao = json.loads(data)
         
-        valor_umidade = informacao['umidade']
-        valor_luminosidade = informacao['luminosidade']
+        valor_umidade = int(informacao['umidade'])
+        valor_umidade *= razao
+        valor_luminosidade = int(informacao['luminosidade'])
+        valor_luminosidade *= razao
+        valor_luminosidade = 100 - valor_luminosidade
         
         if(int(valor_umidade) < 50 and int(precipChuva)== 0):
-            notificacao = "Regue a planta hoje" 
+            not_umidade = "E necessario regar a planta" 
         elif(int(precipChuva) > 0):
-            notificacao = "Hoje ira chover, nao e necessario regar a planta"
+            not_umidade = "Hoje ira chover, nao e necessario regar a planta"
         else:
-            notificacao = "Planta regada"
+            not_umidade = "Planta regada"
+        
+        if(valor_luminosidade > 78):
+            not_lum = "Pouco luminosidade"
+        elif(30 < valor_luminosidade <= 78):
+            not_lum = "A luminosidade esta adequada"
+        else: 
+            not_lum = "Exposicao solar muito intensa"
+        
             
         msg = [
                 {
@@ -35,18 +46,18 @@ def escreve_msg(data, precipChuva):
                     'value'   :  valor_luminosidade  
                 },
                 {
-                    'variable': 'notificacao',
-                    'value'   :  notificacao
+                    'variable': 'notifUmidade',
+                    'value'   :  not_umidade
                 },
                 {
-                    'variable': 'cidade',
-                    'value'   : 'Novo Hamburgo'
-                }
-                
+                    'variable': 'notifLuminosidade',
+                    'value'   : not_lum
+                }         
               ]
             
-        print(msg)
+        
         json_file = json.dumps(msg)
+        print("\nmensagem enviada para o topico " + topico1 + ':\n' + json_file)
         client.publish(topico1, payload=json_file, qos=1, retain=False)
         
     except:
