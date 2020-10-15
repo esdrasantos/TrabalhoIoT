@@ -111,13 +111,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	/*  if(HAL_UART_Receive(&huart1, &pData, bufferSize, SerialTimeOut)==HAL_OK)
-	  {
-		  //HAL_UART_Transmit(&huart2, &pData, bufferSize, SerialTimeOut);
-		  HAL_UART_Transmit(&huart2, &pData, bufferSize, SerialTimeOut);
-		  HAL_UART_Transmit(&huart1, &pData, bufferSize, SerialTimeOut);
 
-	  }*/
   }
   /* USER CODE END 3 */
 }
@@ -161,14 +155,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-{
-	/*adc_values[0] += '0';
-	adc_values[1] += '0';*/
-	//HAL_UART_Transmit(&huart2, &adc_values, sizeof(adc_values), SerialTimeOut);
-	//HAL_UART_Transmit(&huart1, &adc_values, sizeof(adc_values), SerialTimeOut);
 
-}
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	/* Em teoria, os valores de CCR1 ficam na ordem correta da conversão dos canais, o valor convertido é armazenado no vetor e a posicao de memoria eh incrementada a cada leitura*/
@@ -191,22 +178,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		}
 
 		HAL_UART_Receive_DMA(&huart1, &pData, bufferSize); //! Armazena o dado recebido pela serial
-		if(pData == 'h')
-		{
-			snprintf(msg,TAM_MSG,"hello, how are you?");
-			HAL_UART_Transmit_DMA(&huart1, (uint8_t*)msg, strlen(msg));
-			pData = 0;
-		}
 	}
 
 }
-/*void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-	if(huart->Instance == USART1)
-		HAL_UART_Receive_IT(&huart1, &pData, bufferSize); //! Armazena o dado recebido pela serial
-}
-*/
-
 
 /* USER CODE END 4 */
 
