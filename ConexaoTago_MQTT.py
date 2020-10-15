@@ -41,9 +41,16 @@ porta = 1883                           # Porta do broker
 keepAlive = 60                         # Tempo em segundos para o envio de uma requisicao ping
 # Topicos para publicar e subscrever
 topico1    = "tago/data/regador"
+<<<<<<< Updated upstream
 
 mqtt_username = "token"
 mqtt_password = "7f1d7f85-761e-4b98-92b4-7bab3f528b82"
+=======
+topico2    = "tago/data/previsao"
+    
+mqtt_username = "murilo"
+mqtt_password = "126127bf-b15b-4054-abf0-4f0a6f17e828"
+>>>>>>> Stashed changes
 
 print("criando nova instancia")
 client = mqtt.Client()
