@@ -11,8 +11,10 @@ import serial
 import time
 import threading
 
+global precipChuva 
+
 def printit():
-    threading.Timer(3600, printit).start() # Run o código a cada 1h (3600 s)
+    threading.Timer(600, printit).start() # Run o código a cada 1h (3600 s)
     razao = 100/(2**8) 
     def escreve_msg(data, precipChuva):
           
@@ -28,7 +30,7 @@ def printit():
             
             if(int(valor_umidade) < 50 and int(precipChuva)== 0):
                 not_umidade = "É necessário regar a planta" 
-            elif(int(precipChuva) > 0):
+            elif(float(precipChuva) > 0):
                 not_umidade = "Hoje ira chover, nao e necessario regar a planta"
             else:
                 not_umidade = "Planta regada"
@@ -58,7 +60,11 @@ def printit():
                     {
                         'variable': 'notifLuminosidade',
                         'value'   : not_lum
-                    }         
+                    },
+                    {
+                        'variable': 'botao',
+                        'value'   : 1
+                    }
                   ]
                 
             
@@ -97,23 +103,25 @@ def printit():
         
         print("\nmensagem recebida do topico",message.topic)
         print(str(message.payload,'utf-8')) # message.payload pertence a classe bytes, converte-se para string 
-        
-        try:  
-            obj = json.loads(message.payload)  # os bytes que constituem a estrtura de dados em formato json são convertidos numa lista de dicionários
-            chuvaDict = obj[2]                 # o objeto de indice 2 na lista é o dicionário que contem a informação da previsão de chuva
-            precipChuva = chuvaDict['value']   # armazena-se a quantidade de chuva em mm na variável global para manipulação futura
-            
-        except:
-            print("Impossivel extrair informacao da precipitacao de chuva")
+        if(message.topic == topico2):
+            try:  
+                obj = json.loads(message.payload)  # os bytes que constituem a estrtura de dados em formato json são convertidos numa lista de dicionários
+                chuvaDict = obj[2]                 # o objeto de indice 2 na lista é o dicionário que contem a informação da previsão de chuva
+                global precipChuva 
+                precipChuva = chuvaDict['value']   # armazena-se a quantidade de chuva em mm na variável global para manipulação futura
+    
+            except:
+                print("Impossivel extrair informacao da precipitacao de chuva")
        
     # Rotina que trata o evento de conexao, exibindo o return code e subscrevendo o cliente aos topicos de interesse
     def on_connect(client, userdata, flags, rc):
         print("Conectado ao Broker " + broker + " Resultado de conexao: " + str(rc))
         print("subscrevendo ao topico ", topico2)
         client.subscribe(topico2)
+        client.subscribe(topico3)
      
     # Definindo os objetos
-    precipChuva = 0
+    
     
     broker = "mqtt.tago.io"                # Endereço do broker
     porta = 1883                           # Porta do broker
@@ -121,6 +129,7 @@ def printit():
     # Topicos para publicar e subscrever
     topico1    = "tago/data/regador"
     topico2    = "tago/data/previsao"
+    topico3    = "tago/data/realtime"
         
     mqtt_username = "esdra"
     mqtt_password = "e35c4944-06a4-46f1-be9d-243af76bd4a0"
@@ -137,7 +146,7 @@ def printit():
     
     client.on_connect = on_connect
     client.on_message = on_message
-    
+        
     time.sleep(5) 
     client.loop_stop() 
     
