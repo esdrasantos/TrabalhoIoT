@@ -12,11 +12,11 @@ import time
 import threading
 precipChuva = 0
 def printit():
-    threading.Timer(3600, printit).start() # Run o código a cada 1h (3600 s)
+    threading.Timer(60, printit).start() # Run o código a cada 1h (3600 s)
     razao = 100/(2**8) 
     def escreve_msg(data, precipChuva):
           
-        
+        try:
             informacao = json.loads(data)
             
             valor_umidade  = int(informacao['umidade'])
@@ -66,8 +66,8 @@ def printit():
             print("\nmensagem enviada para o topico " + topico1 + ':\n' + json_file)
             client.publish(topico1, payload=json_file, qos=1, retain=False)
             
-      #  except:
-      #      print("Nao foi possivel compor a msg e nem publica-la...")
+        except:
+            print("Nao foi possivel compor a msg e nem publica-la...")
            
     class ConexaoSerial(serial.Serial): #classe filha da classe serial
         

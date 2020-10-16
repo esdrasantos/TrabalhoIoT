@@ -51,7 +51,7 @@ def printit():
                       },
                       {
                       'variable': 'chuva',
-                      'value'   :  "5.0"
+                      'value'   :  precip
                       }
                    ]
         
