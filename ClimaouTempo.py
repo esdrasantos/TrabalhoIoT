@@ -15,7 +15,7 @@ import threading
 
 def printit():
 
-    threading.Timer(3600, printit).start() # Run o código a cada 1h (3600 s)
+    threading.Timer(14400, printit).start() # Run o código a cada 1h (3600 s)
 
     def PrevisaoDoTempo(cidade):    
         
@@ -36,7 +36,6 @@ def printit():
         
         return(temperaturamax,temperatura,precip)
 
- #   print('\nConexão por protocolo MQTT')
     def envia_relatorio(cliente, cidade):   
         (temperaturamax, temperaturamin, precip) = PrevisaoDoTempo(cidade)
         

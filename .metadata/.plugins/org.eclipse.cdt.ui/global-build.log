@@ -166,3 +166,17 @@ arm-none-eabi-size   AmostraSensores.elf
   21080	    120	   2608	  23808	   5d00	AmostraSensores.elf
 Finished building: default.size.stdout
  
+22:57:57 **** Incremental Build of configuration Debug for project AmostraSensores ****
+make -j4 all 
+arm-none-eabi-size   AmostraSensores.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21080	    120	   2608	  23808	   5d00	AmostraSensores.elf
+Finished building: default.size.stdout
+ 
+23:06:40 **** Incremental Build of configuration Debug for project AmostraSensores ****
+make -j4 all 
+arm-none-eabi-size   AmostraSensores.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21080	    120	   2608	  23808	   5d00	AmostraSensores.elf
+Finished building: default.size.stdout
+ 
