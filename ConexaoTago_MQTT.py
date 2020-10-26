@@ -17,8 +17,10 @@ precipChuva = 0
 
 ## funcao que temporiza o running do codigo 
 def printit():
+    
     ## define de quanto em quanto tempo o codigo ira rodar
-    threading.Timer(600, printit).start() # Run o código a cada 10min (600s)
+    #  running de código a cada 10min (600s)
+    threading.Timer(600, printit).start() # 
     
     ## @var_razao
     #  razao utilizada para transcrever as tensoes digitais de 8 bits (0 - 255) em niveis porcentuais de 0 a 100%
@@ -37,11 +39,12 @@ def printit():
             valor_umidade  = int(informacao['umidade'])
             ## manipulacao do valor da umidade para o enquadramento em niveis porcentuais
             valor_umidade *= razao
+            valor_umidade  = 100 - valor_umidade
             ## como a resposta do sensor eh inversamente proporcional a tensao digital, altera-se para obter um valor proporcional 
-            valor_luminosidade = int(informacao['luminosidade'])
+            valor_luminosidade = int(informacao['luminosidade']) 
             ## manipulacao do valor da luminosidade para o enquadramento em niveis porcentuais
             valor_luminosidade *= razao
-            ## idem a variave anterior para obtencao de proporcionalidade
+            ## idem a variavel anterior para obtencao de proporcionalidade
             valor_luminosidade = 100 - valor_luminosidade
             
             ## Analise em intervalos dos valores obtidos no sensoriamento para tomada de decisao 
@@ -178,7 +181,7 @@ def printit():
     ## Configuracao do cliente mqtt
     ## endereço do broker
     broker = "mqtt.tago.io"      
-    ## porta para testes de comunicacao com protocolo mqtt          
+    ## porta para testes de comunicacao com protocolo mqtt (sem seguranca)        
     porta = 1883       
     ## tempo em segundos para o envio de uma requisicao ping para manutencao da conexao                   
     keepAlive = 60                        
