@@ -20,7 +20,7 @@ def printit():
     
     ## define de quanto em quanto tempo o codigo ira rodar
     #  running de código a cada 10min (600s)
-    threading.Timer(600, printit).start() # 
+    threading.Timer(100, printit).start() # 
     
     ## @var_razao
     #  razao utilizada para transcrever as tensoes digitais de 8 bits (0 - 255) em niveis porcentuais de 0 a 100%

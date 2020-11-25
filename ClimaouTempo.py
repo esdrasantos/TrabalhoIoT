@@ -18,7 +18,7 @@ def printit():
     
     ## define de quanto em quanto tempo o codigo ira rodar
     #  running de código a cada  4 horas (14400s)
-    threading.Timer(14400, printit).start() 
+    threading.Timer(600, printit).start() 
     
     ## funcao de scrapping de informacoes sobre a previsao do tempo
     #
